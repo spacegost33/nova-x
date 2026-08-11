@@ -1,0 +1,14 @@
+{
+  "name": "@nova-x/api",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "echo 'API not implemented yet'",
+    "build": "echo 'API not implemented yet'",
+    "lint": "eslint . --max-warnings 0",
+    "check-types": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "5.9.2"
+  }
+}

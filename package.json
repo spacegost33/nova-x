@@ -1,6 +1,8 @@
 {
   "name": "nova-x",
+  "version": "0.1.0",
   "private": true,
+  "description": "NOVA-X – Intelligent Life Operating System",
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
