@@ -9,6 +9,7 @@
     "check-types": "tsc --noEmit"
   },
   "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
     "typescript": "5.9.2"
   }
 }

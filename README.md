@@ -20,15 +20,26 @@ An intelligent operating system for your digital life that:
 
 ## Current Status
 
-**Day 1** – Foundation setup completed  
-Monorepo structure created with:
+**Day 2** – TypeScript configuration completed
 
-- `packages/core` → The Brain
-- `packages/memory` → Context & Memory
-- `packages/actions` → Action system
-- `packages/config` → Shared config
-- `apps/api` → Platform API (placeholder)
-- `apps/web` → Web client (from starter)
+- Added `tsconfig.json` to all new packages
+- Linked packages to shared `@repo/typescript-config`
+- Monorepo is now ready for real development
+
+Previous:
+- Day 1: Foundation (core, memory, actions, config, api)
+
+---
+
+## Packages
+
+| Package              | Purpose                        |
+|----------------------|--------------------------------|
+| `@nova-x/core`       | The Brain (decision + planning)|
+| `@nova-x/memory`     | Context & long-term memory     |
+| `@nova-x/actions`    | Action execution system        |
+| `@nova-x/config`     | Shared configuration           |
+| `@nova-x/api`        | Platform API                   |
 
 ---
 
