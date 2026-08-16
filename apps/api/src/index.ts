@@ -13,7 +13,7 @@ app.use("/*", cors());
 app.get("/", (c) => {
   return c.json({
     name: "NOVA-X API",
-    version: "0.0.2",
+    version: "0.0.3",
     status: "online",
     message: "NOVA-X Backend is alive – Core connected",
   });
@@ -39,7 +39,7 @@ app.post("/v1/think", async (c) => {
       success: true,
       input: message,
       ...result,
-      coreVersion: "0.0.2",
+      coreVersion: "0.0.3",
     });
   } catch (error) {
     return c.json({ error: "Failed to process request" }, 500);
