@@ -2,10 +2,21 @@
 
 import { useState } from "react";
 
+interface NovaResponse {
+  success: boolean;
+  input: string;
+  understanding: string;
+  suggestion: string;
+  nextAction: string;
+  confidence: number;
+  coreVersion: string;
+}
+
 export default function Home() {
   const [input, setInput] = useState("");
-  const [response, setResponse] = useState<string | null>(null);
+  const [response, setResponse] = useState<NovaResponse | null>(null);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const API_URL = "https://nova-x-api.onrender.com";
 
@@ -15,6 +26,7 @@ export default function Home() {
 
     setLoading(true);
     setResponse(null);
+    setError(null);
 
     try {
       const res = await fetch(`${API_URL}/v1/think`, {
@@ -26,9 +38,14 @@ export default function Home() {
       });
 
       const data = await res.json();
-      setResponse(JSON.stringify(data, null, 2));
+
+      if (data.success) {
+        setResponse(data);
+      } else {
+        setError(data.error || "Something went wrong");
+      }
     } catch (err) {
-      setResponse("Error: Could not reach NOVA-X API");
+      setError("Could not reach NOVA-X. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -49,6 +66,7 @@ export default function Home() {
       }}
     >
       <div style={{ maxWidth: "640px", width: "100%" }}>
+        {/* Header */}
         <h1
           style={{
             fontSize: "3rem",
@@ -69,6 +87,7 @@ export default function Home() {
             opacity: 0.85,
             marginBottom: "2.5rem",
             fontSize: "1.15rem",
+            lineHeight: 1.5,
           }}
         >
           You don’t have to think about what to do next.
@@ -77,7 +96,7 @@ export default function Home() {
         </p>
 
         {/* Input Form */}
-        <form onSubmit={handleSubmit} style={{ marginBottom: "1.5rem" }}>
+        <form onSubmit={handleSubmit} style={{ marginBottom: "2rem" }}>
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -85,14 +104,15 @@ export default function Home() {
             rows={4}
             style={{
               width: "100%",
-              padding: "1rem",
-              borderRadius: "12px",
-              border: "1px solid rgba(167, 139, 250, 0.4)",
+              padding: "1rem 1.2rem",
+              borderRadius: "14px",
+              border: "1px solid rgba(167, 139, 250, 0.35)",
               background: "rgba(255,255,255,0.05)",
               color: "white",
               fontSize: "1rem",
               resize: "none",
               outline: "none",
+              lineHeight: 1.5,
             }}
           />
 
@@ -102,37 +122,89 @@ export default function Home() {
             style={{
               marginTop: "1rem",
               width: "100%",
-              padding: "0.9rem",
-              borderRadius: "12px",
+              padding: "0.95rem",
+              borderRadius: "14px",
               border: "none",
               background: loading
                 ? "rgba(167, 139, 250, 0.3)"
                 : "linear-gradient(90deg, #a78bfa, #60a5fa)",
               color: "white",
-              fontSize: "1rem",
+              fontSize: "1.05rem",
               fontWeight: 600,
               cursor: loading ? "not-allowed" : "pointer",
+              transition: "opacity 0.2s",
             }}
           >
             {loading ? "Thinking..." : "Ask NOVA-X"}
           </button>
         </form>
 
-        {/* Response */}
+        {/* Error */}
+        {error && (
+          <div
+            style={{
+              background: "rgba(239, 68, 68, 0.15)",
+              border: "1px solid rgba(239, 68, 68, 0.4)",
+              borderRadius: "14px",
+              padding: "1rem 1.2rem",
+              color: "#fca5a5",
+              marginBottom: "1.5rem",
+            }}
+          >
+            {error}
+          </div>
+        )}
+
+        {/* Clean Response */}
         {response && (
           <div
             style={{
-              background: "rgba(255,255,255,0.05)",
-              border: "1px solid rgba(167, 139, 250, 0.3)",
-              borderRadius: "12px",
-              padding: "1.2rem",
-              whiteSpace: "pre-wrap",
-              fontSize: "0.95rem",
-              lineHeight: 1.5,
+              background: "rgba(255,255,255,0.04)",
+              border: "1px solid rgba(167, 139, 250, 0.25)",
+              borderRadius: "16px",
+              padding: "1.5rem",
+              display: "flex",
+              flexDirection: "column",
+              gap: "1.25rem",
             }}
           >
-            <strong style={{ opacity: 0.7 }}>NOVA-X Response:</strong>
-            <pre style={{ marginTop: "0.8rem", margin: 0 }}>{response}</pre>
+            <div>
+              <div style={{ fontSize: "0.8rem", opacity: 0.6, marginBottom: "0.35rem", letterSpacing: "0.03em" }}>
+                UNDERSTANDING
+              </div>
+              <div style={{ fontSize: "1.05rem", lineHeight: 1.5 }}>
+                {response.understanding}
+              </div>
+            </div>
+
+            <div>
+              <div style={{ fontSize: "0.8rem", opacity: 0.6, marginBottom: "0.35rem", letterSpacing: "0.03em" }}>
+                SUGGESTION
+              </div>
+              <div style={{ fontSize: "1.05rem", lineHeight: 1.5 }}>
+                {response.suggestion}
+              </div>
+            </div>
+
+            <div
+              style={{
+                background: "rgba(167, 139, 250, 0.12)",
+                border: "1px solid rgba(167, 139, 250, 0.25)",
+                borderRadius: "12px",
+                padding: "1rem 1.2rem",
+              }}
+            >
+              <div style={{ fontSize: "0.8rem", opacity: 0.7, marginBottom: "0.35rem", letterSpacing: "0.03em" }}>
+                NEXT ACTION
+              </div>
+              <div style={{ fontSize: "1.1rem", fontWeight: 500, lineHeight: 1.5 }}>
+                {response.nextAction}
+              </div>
+            </div>
+
+            <div style={{ fontSize: "0.75rem", opacity: 0.4, textAlign: "right" }}>
+              Confidence: {Math.round(response.confidence * 100)}% · Core v{response.coreVersion}
+            </div>
           </div>
         )}
       </div>

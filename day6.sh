@@ -1,3 +1,4 @@
+
 #!/bin/bash
 
 echo "🚀 Starting NOVA-X Day 6 – Clean UI"
@@ -225,3 +226,4 @@ echo "Now run:"
 echo "git add ."
 echo "git commit -m \"Day 6: Clean and beautiful response UI\""
 echo "git push origin main"
+
