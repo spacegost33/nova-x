@@ -1,3 +1,41 @@
+
+#!/bin/bash
+
+echo "🚀 NOVA-X Week 3 (Days 15–21) – Auth + Database"
+
+# ======================
+# 1. Install Supabase in web app
+# ======================
+cd apps/web
+pnpm add @supabase/supabase-js
+cd ../..
+
+# ======================
+# 2. Create Supabase client
+# ======================
+mkdir -p apps/web/lib
+
+cat > apps/web/lib/supabase.ts << 'EOF'
+import { createClient } from "@supabase/supabase-js";
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+EOF
+
+# ======================
+# 3. Create environment example
+# ======================
+cat > apps/web/.env.local.example << 'EOF'
+NEXT_PUBLIC_SUPABASE_URL=https://yjjmgzyvzsvepbmbmcyr.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_KPIzz3Hp5ivkEzB1VYZjRQ_YBvZ8AOT
+EOF
+
+# ======================
+# 4. New full page with Auth + Database
+# ======================
+cat > apps/web/app/page.tsx << 'EOF'
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -288,3 +326,21 @@ export default function Home() {
     </main>
   );
 }
+EOF
+
+echo ""
+echo "✅ Week 3 files created!"
+echo ""
+echo "IMPORTANT: Now create the file apps/web/.env.local with your real keys:"
+echo ""
+echo "NEXT_PUBLIC_SUPABASE_URL=your_url_here"
+echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key_here"
+echo ""
+echo "Then run:"
+echo "  pnpm install"
+echo "  git add ."
+echo "  git commit -m \"Week 3 (Days 15-21): Auth + Supabase + Permanent conversations\""
+echo "  git push origin main"
+echo ""
+echo "Also add the same environment variables in Vercel Project Settings → Environment Variables"
+
