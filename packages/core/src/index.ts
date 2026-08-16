@@ -1,5 +1,5 @@
 // NOVA-X Core – The Brain
-// Week 2: Context-aware + Mood + Goals
+// Week 2: Context-aware + Mood + Goals (TypeScript fixed)
 
 export const CORE_VERSION = "0.1.0";
 
@@ -52,23 +52,17 @@ export class NovaCore {
       energyLevel = "high";
     }
 
-    // Detect goal
+    // Detect goal (TypeScript safe)
     let detectedGoal: string | null = null;
-    const goalMatch = input.message.match(/(?:i want to|i need to|i have to|my goal is to|i'm trying to)\s+(.+)/i);
-    if (goalMatch) {
+    const goalMatch = input.message.match(
+      /(?:i want to|i need to|i have to|my goal is to|i'm trying to)\s+(.+)/i
+    );
+    if (goalMatch && goalMatch[1]) {
       detectedGoal = goalMatch[1].trim();
     }
 
-    // Context from recent history
-    const recentUserMessages = history
-      .filter((m) => m.role === "user")
-      .slice(-3)
-      .map((m) => m.content.toLowerCase())
-      .join(" ");
-
     // === RESPONSE LOGIC ===
 
-    // Goal detected
     if (detectedGoal) {
       return {
         understanding: `You want to: "${detectedGoal}"`,
@@ -81,7 +75,6 @@ export class NovaCore {
       };
     }
 
-    // Tired
     if (detectedMood === "tired") {
       return {
         understanding: "Your energy is currently low.",
@@ -94,7 +87,6 @@ export class NovaCore {
       };
     }
 
-    // Stressed
     if (detectedMood === "stressed") {
       return {
         understanding: "You're carrying mental load right now.",
@@ -107,7 +99,6 @@ export class NovaCore {
       };
     }
 
-    // Low mood
     if (detectedMood === "low") {
       return {
         understanding: "You're in a low emotional state.",
@@ -120,7 +111,6 @@ export class NovaCore {
       };
     }
 
-    // Bored
     if (detectedMood === "bored") {
       return {
         understanding: "You're under-stimulated or lacking direction.",
@@ -133,7 +123,6 @@ export class NovaCore {
       };
     }
 
-    // Study / Work
     if (has("study", "exam", "test", "assignment", "homework", "work", "project", "deadline")) {
       return {
         understanding: "You're in performance or study mode.",
@@ -146,7 +135,6 @@ export class NovaCore {
       };
     }
 
-    // Positive / Motivated
     if (detectedMood === "positive") {
       return {
         understanding: "Your energy and mood are currently good.",
@@ -159,7 +147,6 @@ export class NovaCore {
       };
     }
 
-    // Default with context awareness
     if (history.length > 2) {
       return {
         understanding: "I'm tracking our recent conversation.",
@@ -172,7 +159,6 @@ export class NovaCore {
       };
     }
 
-    // Pure default
     return {
       understanding: "I'm ready to understand your current state.",
       suggestion: "The clearer you are about how you feel or what you want, the better I can guide you.",
