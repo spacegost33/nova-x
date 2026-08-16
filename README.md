@@ -4,9 +4,13 @@
 
 > You don’t have to think about what to do next. NOVA-X does.
 
-NOVA-X is an intelligent operating system that understands your context, remembers what matters, and tells you exactly what to do next.
+---
+
+## Live URLs
+
+- **Web**: https://nova-x-web.vercel.app/
+- **API**: https://nova-x-api.onrender.com/
 
 ---
 
 ## Project Structure
-
